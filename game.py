@@ -97,14 +97,18 @@ def spawn_bricks(x,y,step):
     return
 
 def bricksshow(grid,arr,paddle):
+    flag = 1
     for i in arr:
         x,y=i.get_coord()
+        if i.type!=4:
+            flag=0
         if i.health_left() <= 0:
             i.del_brick(grid)
             arr.remove(i)
             paddle.inc_score()
             continue
         i.show_brick(grid,x,y,0)
+    return flag
     
 powerups = [] # spawned
 activepowers = [] # activated
@@ -183,7 +187,7 @@ def movement(ball,paddle):
         paddle.show_paddle(myboard.grid,x-3,y)
         if ball.spawn == 1:
             a,b = ball.get_coord()
-            ball.show_ball(myboard.grid,a-3,b)
+            ball.show(myboard.grid,a-3,b)
     #right
     elif ck == 'd':
         x,y = paddle.get_coord()
@@ -193,7 +197,7 @@ def movement(ball,paddle):
         paddle.show_paddle(myboard.grid,x+3,y)
         if ball.spawn == 1:
             a,b = ball.get_coord()
-            ball.show_ball(myboard.grid,a+3,b)
+            ball.show(myboard.grid,a+3,b)
     #start
     elif ck == 'e':
         if ball.spawn == 1 and paddle.check_grab() == 1:
@@ -203,6 +207,6 @@ def movement(ball,paddle):
     elif ck == ' ':
         if ball.get_catch() == 1 and ball.spawn ==0:
             paddle.set_grab()
-        elif ball.get_catch() == 0 and ball.spawn ==0:
-            paddle.set_grab()
+        # elif ball.get_catch() == 0 and ball.spawn ==0:
+        #     paddle.set_grab()
         

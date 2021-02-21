@@ -44,7 +44,8 @@ class Paddle(Player):
         return self.__grab
     def set_grab(self):
         self.__grab = 0 if self.__grab == 1 else 1
-
+    def grab_set(self):
+        self.__grab = 1
     def get_length(self):
         # fig = self.getfig()
         return len(self.__fig[0])

@@ -16,36 +16,34 @@ if __name__ == "__main__":
     # signal.signal(signal.SIGINT,signal.SIG_IGN)
     spawn_bricks(5,5,20)
     xx,yy = mypaddle.get_coord()
-    x = random.randint(xx,xx+mypaddle.get_length()-2)
+    x = random.randint(xx+5,xx+mypaddle.get_length()-2)
     balls.append(Ball(x,yy-2))
-    balls[0].show_ball(myboard.grid,x,yy-2)
+    balls[0].show(myboard.grid,x,yy-2)
 
+    flag=0
     while True:
-        flag=1
         timeleft = GAMETIME - (round(time.time()) - round(start_time))
         if(timeleft <= 0 or mypaddle.lives_left()<=0):
             clear_screen()
             print('GAME OVER!'.center(FRAME_WIDTH)) 
             mynav.print_header(timeleft,mypaddle,bricks_arr)
             quit()
-        for i in bricks_arr:
-            if i.type!=4:
-                flag=0
         if(time.time()-screen_time>=0.01):
             cursor_set()
             mynav.print_header(timeleft,mypaddle,bricks_arr)
             droppings(mypaddle,myboard.grid)
             movement(balls[0],mypaddle)
 
+            pad_x,pad_y = mypaddle.get_coord()
+            mypaddle.show_paddle(myboard.grid,pad_x,pad_y)
+            flag = bricksshow(myboard.grid,bricks_arr,mypaddle)
+            
             if(len(bricks_arr)==0 or flag==1):
                 clear_screen()
                 print('You Win!'.center(FRAME_WIDTH)) 
                 mynav.print_header(timeleft,mypaddle,bricks_arr)
                 quit()
                 
-            pad_x,pad_y = mypaddle.get_coord()
-            mypaddle.show_paddle(myboard.grid,pad_x,pad_y)
-            bricksshow(myboard.grid,bricks_arr,mypaddle)
             loseball=[]
             addball=[]
 
@@ -71,7 +69,7 @@ if __name__ == "__main__":
                 # Ball grabbed by paddle
                 elif ball_stat == 5:
                     a,b = mypaddle.get_coord()
-                    val.setspawn()
+                    # val.setspawn()
                     # diff = x-a
                     # val.set_coord(a+diff,y)
                 
@@ -85,9 +83,9 @@ if __name__ == "__main__":
             if len(balls) == 0:
                 mypaddle.dec_lives()
                 a,b = mypaddle.get_coord()
-                x = random.randint(a,a+mypaddle.get_length())
-                addball.append(Ball(a,b-2))
-                mypaddle.set_grab()
+                x = random.randint(a+5,a+mypaddle.get_length())
+                addball.append(Ball(x,b-2))
+                mypaddle.grab_set()
             if addball:
                 add_ball(addball,balls)
 

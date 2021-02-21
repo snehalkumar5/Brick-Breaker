@@ -58,7 +58,7 @@ class Ball(Player):
         x,y = self.get_coord()
         grid[y][x]= ' '
         
-    def show_ball(self,grid,x,y):
+    def show(self,grid,x,y):
         self.clear_ball(grid)
         self.set_coord(x,y)
         grid[y][x]=self.fig[0]
@@ -72,14 +72,10 @@ class Ball(Player):
         # print('collided',collide)
         if collide == 6:
             return collide
-        # if self.get_catch() == 1:
-        #     self.clear_ball(grid)
-        #     self.show_ball(grid,x,y)
-        #     return collide
+       
         if collide == 5:
             self.clear_ball(grid)
-            # self.set_coord(x,y)
-            self.show_ball(grid,x,y)
+            self.show(grid,x,y)
             return collide
         x+=self.get_xvel()
         y+=self.get_yvel()
@@ -87,7 +83,7 @@ class Ball(Player):
             x+=self.get_xvel()
             y+=self.get_yvel()
         # self.set_coord(x,y)
-        self.show_ball(grid,x,y)
+        self.show(grid,x,y)
         return collide
 
     def check_collision(self,grid,brickarr,paddle):
@@ -95,8 +91,6 @@ class Ball(Player):
         beast = self.get_thru()
         x_vel = self.get_xvel()
         y_vel = self.get_yvel()
-        # if self.get_catch() == 1:
-        #     return 0
         if y >= 38:
             return 6
         if y <= 1:
