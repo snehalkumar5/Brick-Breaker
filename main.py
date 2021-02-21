@@ -1,19 +1,15 @@
-import signal
 import os
 from game import *
 from navbar import Navbar
 import numpy as np
-# Start time of the game
-start_time = time.time()
-screen_time=time.time()
-x=time.time()
+game_start = time.time()
+disp_time=time.time()
 move=1
 mynav = Navbar(FRAME_WIDTH)
 clear_screen()
 
 
 if __name__ == "__main__":
-    # signal.signal(signal.SIGINT,signal.SIG_IGN)
     spawn_bricks(5,5,20)
     xx,yy = mypaddle.get_coord()
     x = random.randint(xx+5,xx+mypaddle.get_length()-2)
@@ -22,13 +18,13 @@ if __name__ == "__main__":
 
     flag=0
     while True:
-        timeleft = GAMETIME - (round(time.time()) - round(start_time))
+        timeleft = GAMETIME - (round(time.time()) - round(game_start))
         if(timeleft <= 0 or mypaddle.lives_left()<=0):
             clear_screen()
             print('GAME OVER!'.center(FRAME_WIDTH)) 
             mynav.print_header(timeleft,mypaddle,bricks_arr)
             quit()
-        if(time.time()-screen_time>=0.01):
+        if(time.time()-disp_time>=0.01):
             cursor_set()
             mynav.print_header(timeleft,mypaddle,bricks_arr)
             droppings(mypaddle,myboard.grid)
@@ -91,5 +87,5 @@ if __name__ == "__main__":
 
             inactive_powers(mypaddle,balls[0],myboard.grid)
             active_powers(time.time(),mypaddle,balls[0],myboard.grid)
-            screen_time=time.time()
+            disp_time=time.time()
             myboard.print_board()

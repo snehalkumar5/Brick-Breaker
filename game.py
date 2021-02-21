@@ -1,5 +1,4 @@
 import random
-import math
 import time
 import numpy as np
 from colorama import init as coloramaInit, Fore, Style, deinit as coloramaReset
@@ -8,7 +7,6 @@ from board import Board
 from paddle import Paddle
 from bricks import *
 from ball import *
-from alarmexception import AlarmException
 from input import Get,input_to
 from utils import *
 from powerup import *

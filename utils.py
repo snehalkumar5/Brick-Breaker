@@ -5,12 +5,12 @@ Utility functions:
     - timer settimeout
 """
 import numpy as np
-import subprocess as sp
 from colorama import Style,Fore
+import os
 
 BALL = Fore.LIGHTYELLOW_EX+'O'+Style.RESET_ALL
 def clear_screen():
-    sp.call('clear', shell=True)
+    os.system('clear')
 
 def check_keys(key):
     """

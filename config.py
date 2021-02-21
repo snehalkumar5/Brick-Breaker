@@ -3,9 +3,7 @@ Module for configs
 """
 import numpy as np
 from colorama import Back,Style,Fore
-import signal
 import os
-import sys
 
 GAMETIME=120
 INPUT_CHAR=''
