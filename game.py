@@ -9,7 +9,7 @@ from paddle import Paddle
 from bricks import *
 from ball import *
 from alarmexception import AlarmException
-from input import _getChUnix as getChar
+from input import Get,input_to
 from utils import *
 from powerup import *
 
@@ -157,21 +157,7 @@ def droppings(paddle,grid):
             
 
 def movement(ball,paddle):
-    def handler_alarm(signum,frame):
-        raise AlarmException
-
-    def user_input(timeout=0.1):
-        signal.signal(signal.SIGALRM, handler_alarm)
-        signal.setitimer(signal.ITIMER_REAL, timeout)
-        try:
-            text = getChar()()
-            signal.alarm(0)
-            return text
-        except AlarmException:
-            pass
-        signal.signal(signal.SIGALRM, signal.SIG_IGN)
-        return ''
-    INPUT_CHAR = user_input()
+    INPUT_CHAR = input_to()
     char = INPUT_CHAR
     ck = check_keys(char)
     if ck==-1:
