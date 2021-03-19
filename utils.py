@@ -19,7 +19,7 @@ def check_keys(key):
     key = key.lower()
     if key == 'q':
         return -1
-    if not key in (' ', 'a', 'd', 't', 'w', 'e'):
+    if not key in (' ', 'a', 'd', 't', 'w', 'e', 'k'):
         return 0
     return key
 

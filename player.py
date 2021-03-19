@@ -17,6 +17,6 @@ class Player():
         for i in range(len(figure)):
             for j in range(len(figure[i])):
                 # print(grid[y+i][x+j])
-                # if grid[y+i][x+j]!=' ':
+                # if grid[y+i][x+j]=='':
                 #     continue
                 grid[y+i][x+j]=figure[i][j]

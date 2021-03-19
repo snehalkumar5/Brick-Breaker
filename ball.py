@@ -2,22 +2,24 @@ import numpy as np
 from config import FRAME_HEIGHT,FRAME_WIDTH
 from player import Player
 from utils import BALL
+import os
 
 class Ball(Player):
     """
     Class for Ball
     """
-    def __init__(self,x,y):
+    def __init__(self,x,y,z,velx=1,vely=1):
         self.fig = np.array([BALL])
         self.__catch = 0
         self.angle = 0
-        self.__x_vel = 1
-        self.__y_vel = 1
+        self.__x_vel = velx
+        self.__y_vel = vely
         self.__speedup = 0
         self.__thru = 0
+        self.__fire = 0
         self.__multiplier = 0
         self.numspawns = 0
-        self.spawn = 1
+        self.spawn = z
         Player.__init__(self,x,y)   
 
     def set_catch(self):
@@ -43,6 +45,10 @@ class Ball(Player):
         return self.__thru
     def set_thru(self):
         self.__thru = 0 if self.__thru == 1 else 1
+    def get_fire(self):
+        return self.__fire
+    def set_fire(self):
+        self.__fire = 0 if self.__fire == 1 else 1
     def get_multiplier(self):
         return self.__multiplier
     def set_multiplier(self):
@@ -65,71 +71,88 @@ class Ball(Player):
         # print('x y:',x,y)
 
 
-    def move_ball(self,grid,bricksarr,paddle):
+    def move_ball(self,grid,bricksarr,paddle,boss):
         x,y = self.get_coord()
+        if self.spawn == 1:
+            return 0,[]
         # print('new:',x,y,self.get_catch())
-        collide = self.check_collision(grid,bricksarr,paddle)
-        # print('collided',collide)
+        collide,rem = self.check_collision(grid,bricksarr,paddle,boss,x,y)
         if collide == 6:
-            return collide
-       
+            return collide,rem
         if collide == 5:
             self.clear_ball(grid)
             self.show(grid,x,y)
-            return collide
+            return collide,rem
         x+=self.get_xvel()
         y+=self.get_yvel()
         if self.get_speedup() == 1:
             x+=self.get_xvel()
             y+=self.get_yvel()
-        # self.set_coord(x,y)
         self.show(grid,x,y)
-        return collide
+        return collide,rem
 
-    def check_collision(self,grid,brickarr,paddle):
+    def check_collision(self,grid,brickarr,paddle,boss,x,y):
         x,y = self.get_coord()
         beast = self.get_thru()
+        fire = self.get_fire()
         x_vel = self.get_xvel()
         y_vel = self.get_yvel()
+        rem=[]
         if y >= 38:
-            return 6
+            return 6,rem
         if y <= 1:
             self.clear_ball(grid)
             self.set_coord(x,1)
-
+            os.system('aplay -q ./sounds/collide.wav&')
             self.set_speed(x_vel,-y_vel)
-            return 1
+            return 1,rem
         if x >= FRAME_WIDTH-10:
+            os.system('aplay -q ./sounds/collide.wav&')
             self.set_speed(-x_vel,y_vel)
-            return 1
+            return 1,rem
         if x <= 1:
+            os.system('aplay -q ./sounds/collide.wav&')
             self.clear_ball(grid)
             self.set_speed(-x_vel,y_vel)
-            return 1
+            return 1,rem
         for i in range(len(brickarr)):
-            collide_brick = brickarr[i].check_collision(grid,x_vel,y_vel,beast,brickarr)
+            collide_brick = brickarr[i].check_collision(grid,x_vel,y_vel,beast,brickarr,fire,x,y)
             if collide_brick==0:
                 continue
             elif collide_brick==1 or collide_brick == 3: 
                 self.set_speed(x_vel,-y_vel)
-                if brickarr[i].health_left()==0:
-                    brickarr.pop(i)
-                    return 9
-                return 2
+                if brickarr[i].health_left()<=0:
+                    brickarr[i].del_brick(grid)
+                    rem.append(i)
+                    return 9,rem
+                return 2,rem
             elif collide_brick==2:
                 self.set_speed(-x_vel,y_vel)
-                if brickarr[i].health_left()==0:
-                    brickarr.pop(i)
-                    return 9
-                return 2
-
-        collide_pad = paddle.check_collision(grid,BALL)
+                if brickarr[i].health_left()<=0:
+                    brickarr[i].del_brick(grid)
+                    rem.append(i)
+                    return 9,rem
+                return 2,rem
+        
+        #CHECK BOSS COLLISION
+        if boss!=0:
+            collide_boss = boss.check_collision(grid,x,y)
+            if collide_boss == 2:
+                self.set_speed(-x_vel,y_vel)
+                return 7,rem
+            elif collide_boss == 3:
+                self.set_speed(x_vel,-y_vel)
+                return 7,rem
+            
+       
+        #CHECK PADDLE COLLISION
+        collide_pad = paddle.check_collision(grid,x,y)
         # if paddle.check_grab()==1 and collide_pad!=0:
-        #     return 5
+        #     return 5,rem
 
-        # print(collide_pad)
+        # print('eadaeda',collide_pad)
         if collide_pad == 0:
-            return 0
+            return 0,rem
         # if collide_pad == 1:
         #     self.set_speed(0,-y_vel)
         # elif collide_pad == 2:
@@ -152,8 +175,19 @@ class Ball(Player):
                 self.set_speed(x_vel+2,-y_vel)
             else:
                 self.set_speed(x_vel-2,-y_vel)
+        os.system('aplay -q ./sounds/collide.wav&')
         if paddle.check_grab() == 1:
-            return 5
+            return 5,rem
         else:
-            return 3   
-        return 0
+            return 3 ,rem
+
+        return 0,rem
+
+# 0 - NOP        
+# 1 - WALL
+# 2 - BRICK
+# 3 - PADDLE
+# 5 - GRAB
+# 6 - DEAD
+# 7 - BOSS
+# 9 - BRICK DEAD
