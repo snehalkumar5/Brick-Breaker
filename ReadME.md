@@ -15,6 +15,10 @@ t - To skip to next level
 ### Features
 #### Multiple Levels:
 3 levels with different layouts. Use key 'T' to skip through.
+Changing levels:
+Loses all powers
+Score carries over
+
 #### Falling bricks
 After a set time (FALLING_TIME, default=70), the bricks drop by one unit towards the paddle when the ball hits the paddle. On reaching the bottom, game ends.
 ```python
