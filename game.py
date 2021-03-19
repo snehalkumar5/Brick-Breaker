@@ -60,7 +60,7 @@ def spawn_bricks(x,y,step,level,bricks_arr):
                 # x = 1
         if y >= 15:
             return 
-        pp = 1 if random.random()>0.7 else 0
+        pp = 1
         if y == 5:
             mybricks = UltraBrick(x,y,pp)
             # mybricks.show_brick(myboard.grid,x,y,0)
@@ -111,7 +111,7 @@ def spawn_bricks(x,y,step,level,bricks_arr):
                 # x = 1
         if y >= 15:
             return 
-        pp = 1 if random.random()>0.7 else 0
+        pp = 1
         if y == 5:
             mybricks = BasicBrick(x,y,pp)
             # mybricks.show_brick(myboard.grid,x,y,0)
@@ -161,13 +161,13 @@ def spawn_bricks(x,y,step,level,bricks_arr):
                 # x = 1
         if y >= 18:
             return 
-        pp=0
+        pp=1
         if y == 5:
             mybricks = BasicBrick(x,y,pp)
             # mybricks.show_brick(myboard.grid,x,y,0)
         elif y == 8:
             if x < FRAME_WIDTH/8:
-                mybricks = UltraBrick(x,y,pp)
+                mybricks = SolidBrick(x,y,pp)
             elif x <FRAME_WIDTH/4:
                 mybricks = UltraBrick(x,y,pp)
             elif x < FRAME_WIDTH - 120:
@@ -185,7 +185,7 @@ def spawn_bricks(x,y,step,level,bricks_arr):
             elif x < FRAME_WIDTH - 30:
                 mybricks = BasicBrick(x,y,pp)
             else: 
-                mybricks = UltraBrick(x,y,pp)
+                mybricks = SolidBrick(x,y,pp)
 
         elif y == 11:
             mybricks = PrideBrick(x,y,pp)
@@ -236,7 +236,7 @@ def dropthabomb(x,y,powerups):
     if random.random()<=0.3:
         return
     rand = random.randint(0,8)
-    if rand >= 0:
+    if rand >= 7:
         # power = Power_Multiplier(x,y,time.time())
         power = Power_Shoot(x,y,time.time())
     elif rand >= 6:

@@ -16,7 +16,7 @@ class Boss(Player):
         self.__fig = np.array([[" "," "," ",".","-","-","-","."," "," "," "],\
             [" ","_","/","_","_","~","0","_","\\","_"," "],\
                 ["(","_","_","_","_","_","_","_","_","_",")"]])
-        self.__health = 5
+        self.__health = 10
         self.spawned = 0
         Player.__init__(self,x, y)  
 
@@ -41,9 +41,9 @@ class Boss(Player):
         self.set_coord(x,y)
         fig = self.getfig()
         health = self.get_health()
-        if health==1 and self.spawned==0:
+        if health==2 and self.spawned==0:
             self.spawn_protecc(grid,brickarray)
-        if health==3 and self.spawned==0:
+        if health==6 and self.spawned==0:
             self.spawn_protecc(grid,brickarray)
 
         Player.show(self,grid,fig,x,y)
@@ -71,7 +71,7 @@ class Boss(Player):
             if x>FRAME_WIDTH-10:
                 self.spawned=1
                 break
-            brickarray.append(PremiumBrick(x,y,0))
+            brickarray.append(BasicBrick(x,y,0))
             x+=10
 
 

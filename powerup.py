@@ -198,14 +198,14 @@ class Power_Multiplier(PowerUp):
         return 0
 
     def activate(self,paddle,ball,grid):
-        ball.set_multiplier()
+        ball.set_multiplier(1)
         if ball.get_multiplier() == 1:
             self.set_active()
             return 1
         return 0
 
     def deactivate(self,paddle,ball,grid):
-        ball.set_multiplier()
+        ball.set_multiplier(0)
         if ball.get_multiplier() == 0:
             self.set_deactive()
             return 1

@@ -5,7 +5,7 @@ import numpy as np
 from colorama import Back,Style,Fore
 import os
 
-GAMETIME=300
+GAMETIME=350
 INPUT_CHAR=''
 
 FRAME_WIDTH = 150
@@ -19,7 +19,7 @@ BACK_COLOR = Back.BLACK
 
 PAUSED = False
 GRAVITY=5
-FALLING_TIME=14.9
+FALLING_TIME=100
 BULLET_SHOOT=0.9
 BOMB_SHOOT=2.9
 TIME_BUF=0.2

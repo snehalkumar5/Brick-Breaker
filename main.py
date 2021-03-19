@@ -16,6 +16,7 @@ bullets=[]
 
 step = 0
 if __name__ == "__main__":
+    os.system('aplay -q ./sounds/game_start.wav&')
     level=1
     while level>=0:
         clear_screen()
@@ -29,6 +30,11 @@ if __name__ == "__main__":
             del i
         bricks_arr.clear()
         bricks_arr=[]
+        for i in bullets:
+            i.clear_bullet(myboard.grid)
+            del i
+        bullets.clear()
+        bullets=[]
         if level!=3:
             spawn_bricks(5,5,0,level,bricks_arr)
         xx,yy = mypaddle.get_coord()
@@ -51,10 +57,14 @@ if __name__ == "__main__":
             # print(time_passed)
             timeleft = GAMETIME - time_passed
             step=0
-            if time_passed >= 70:
-                todrop=1
+            
             if(timeleft <= 0 or mypaddle.lives_left()<=0 or level>3 or endgame==1):
                 clear_screen()
+                if level>3:
+                    print('YOU WIN!'.center(FRAME_WIDTH)) 
+                    os.system('aplay -q ./sounds/game_win.wav&')
+                    mynav.print_header(timeleft,mypaddle,bricks_arr,level,myboss)
+                    quit()    
                 print('GAME OVER!'.center(FRAME_WIDTH)) 
                 os.system('aplay -q ./sounds/game_over.wav&')
                 mynav.print_header(timeleft,mypaddle,bricks_arr,level,myboss)
@@ -63,6 +73,7 @@ if __name__ == "__main__":
             # Spawn bombs
             if myboss!=0:
                 if myboss.get_health()<=0:
+                    mypaddle.inc_score(1000)
                     endgame=1
                 if BOMB_SHOOT <= time.time()-chck_time:
                     x,y=myboss.get_coord()
@@ -75,6 +86,7 @@ if __name__ == "__main__":
                 if BULLET_SHOOT <= time.time()-bullet_time:
                     a,b = mypaddle.get_coord()
                     lent = mypaddle.get_length()
+                    os.system('aplay -q ./sounds/shoot.wav&')
                     bullets.append(Bullet(a,b-1,0))
                     bullets.append(Bullet(a+lent-1,b-1,0))
                     bullet_time=time.time()
@@ -100,7 +112,7 @@ if __name__ == "__main__":
                         xvel=val.get_xvel()
                         yvel=val.get_yvel()
                         addball.append(Ball(x,y,0,xvel,yvel))
-                        val.set_multiplier()
+                        val.set_multiplier(0)
 
                     # Ball grabbed by paddle
                     elif ball_stat == 5:
@@ -113,11 +125,12 @@ if __name__ == "__main__":
                     elif ball_stat == 9:
                         if rem:
                             for i in rem:
+                                if bricks_arr[i].check_power()==1:
+                                    dropthabomb(x,y-1,powerups)
                                 bricks_arr.pop(i)
-                                dropthabomb(x,y-1,powerups)
                         mypaddle.inc_score()
                     
-                    elif ball_stat == 3:
+                    elif ball_stat == 3 and val.spawn==0:
                         todrop = 1
                 next_time=time.time()
                     
@@ -144,18 +157,19 @@ if __name__ == "__main__":
                 droppings(mypaddle,myboard.grid,balls[0],powerups,bullets,myboss,bricks_arr)
 
                 # FALLING BRICKS
-                if (todrop == 1 and FALLING_TIME <= time.time()-store_time):
+                # if (todrop == 1 and FALLING_TIME <= time.time()-store_time):
+                if (todrop == 1 and time_passed>=FALLING_TIME):
                     store_time = time.time()
                     step=1
                     todrop=0
                 flag = bricksshow(myboard.grid,bricks_arr,mypaddle,step)
                 step=0
-                if(len(bricks_arr) == 0 or flag==1):
+                if(len(bricks_arr) == 0 or flag==1 or level>3):
                     clear_screen()
-                    print('You Cleared the level!'.center(FRAME_WIDTH)) 
+                    print('You Win!'.center(FRAME_WIDTH)) 
                     mynav.print_header(timeleft,mypaddle,bricks_arr,level,myboss)
                     step=0
-                    run=next_level(level)
+                    run=False
                 disp_time=time.time()
                 myboard.print_board()
                 if flag == -1:
@@ -163,7 +177,7 @@ if __name__ == "__main__":
             if run == False:
                 mypaddle.grab_set()
                 level+=1
-                active_powers(time.time()+1000,mypaddle,val,myboard.grid,activepowers)
+                active_powers(time.time()+1000,mypaddle,balls[0],myboard.grid,activepowers)
                 for i in balls:
                     loseball.append(i)
                 if loseball:

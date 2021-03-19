@@ -15,8 +15,8 @@ class Paddle(Player):
     def __init__(self, x, y):
         self.__fig = np.array([[body0 if i == 0 or i== 11 else body1 for i in range(12)],\
             [body2 if i == 0 or i== 11 else body1 for i in range(12)]])
-        self.__fig1 = np.array([[body2 if i == 0 or i== 11 else body1 for i in range(12)],\
-            [body2 if i == 0 or i== 11 else body1 for i in range(12)]])
+        # self.__fig1 = np.array([[body2 if i == 0 or i== 11 else body1 for i in range(12)],\
+        #     [body2 if i == 0 or i== 11 else body1 for i in range(12)]])
         # self.__fig1 = np.array([[body0 if i == 0 or i== 17 else body1 for i in range(18)],\
         #     [body2 if i == 0 or i== 17 else body1 for i in range(18)]]) #extended
         # self.__fig2 = np.array([[body0 if i == 0 or i== 5 else body1 for i in range(6)],\
@@ -43,8 +43,8 @@ class Paddle(Player):
 
     def show_score(self):
         return self.__score
-    def inc_score(self):
-        self.__score += 10
+    def inc_score(self,x=10):
+        self.__score += x
 
     def check_grab(self):
         return self.__grab
@@ -86,9 +86,14 @@ class Paddle(Player):
                 grid[y+i][x+j]=' '
 
     def getfig(self):
+        fig = self.__fig
         if self.get_shoot()==1:
-            return self.__fig1
-        return self.__fig
+            fig[0][0] = body2
+            fig[0][self.get_length()-1]=body2
+        else:
+            fig[0][0] = body0
+            fig[0][self.get_length()-1]=body0
+        return fig
 
     def change_size(self,x):
         length = self.get_length()+x

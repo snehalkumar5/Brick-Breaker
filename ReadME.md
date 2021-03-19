@@ -10,73 +10,47 @@ a - To move paddle left
 d - To move paddle right
 space - To use grab
 q - To quit
+t - To skip to next level
 
 ### Features
-### OOPS:
-Inheritance: Classes inherit attributes and methods of parent class.
+#### Multiple Levels:
+3 levels with different layouts. Use key 'T' to skip through.
+#### Falling bricks
+After a set time (FALLING_TIME, default=70), the bricks drop by one unit towards the paddle when the ball hits the paddle. On reaching the bottom, game ends.
 ```python
-class  Brick:
-	"""Parent"""
-	def  __init__(self, x, y,pow):
-		self._x = x
-		self._y = y
-		
-class  BasicBrick(Brick):
-	"""Child inherits"""
-	def  __init__(self, x, y, power):
-		Brick.__init__(self, x, y, power)
+if (todrop == 1 and time_passed>=FALLING_TIME):
+	step=1
+	todrop=0
+flag = bricksshow(myboard.grid,bricks_arr,mypaddle,step)
 ```
-Polymorphism: Used function overloading for polymorphism. Function behaves differently based on the parameters passed when called.
-```python
-class  Player():
-	"""
-	Player class
-	"""
-	def  show(self,grid,figure,x,y):
-		for i in  range(len(figure)):
-		for j in  range(len(figure[i])):
-		grid[y+i][x+j]=figure[i][j]
-		
-class  Ball(Player):
-	"""
-	Class for Ball
-	"""
-	def  __init__(self,x,y):
-		self.fig = np.array([BALL])
-		Player.__init__(self,x,y)
-		
-	def  show(self,grid,x,y):
-		self.clear_ball(grid)
-		self.set_coord(x,y)
-		grid[y][x]=self.fig[0]
-```
-Encapsulation: The methods used in calls are through objects of classes. This encapsulates the attributes of the object.
-```python
-mynav = Navbar(FRAME_WIDTH)
-mynav.print_header(timeleft,mypaddle,bricks_arr)
-```
-Abstraction: Functions like check_collision(), move_ball() are made intuitive by hiding the inner details of the function from the user.
+#### Boss Enemy:
+Last level has a Final Boss - UFO
+Drops bomb every interval (BOMB_SHOOT,default=3sec).
+Loses 1hp on collision with ball
+Loses 2hp on collision with bullet
+1000 points on beating the boss
+Spawns a defense array below it twice on reaching certain health (6hp,2hp)
+Defense array doesn't drop powerups
 
-### Collisions: 
-1. Ball and paddle 
-2. Ball and wall
-3. Ball and bricks
+#### Rainbow Bricks:
+Changes colours every frame. On collision appears as a normal brick with same features as that of when collision occurred.
 
-### Bricks
-Change colour when health decreases
-BasicBrick - has 1 hp (breaks on one hit)
-PremiumBrick - has 2hp
-UltraBrick - has 3hp
-SolidBrick - unbreakable brick (breaks only due to exploding brick or Thru-ball powerup)
-ExplodeBrick - explodes and breaks neighboring bricks as well
+#### Powerups:
+All powerups now drop with a velocity corresponding to the ball. Drops have gravity factor.
+1. Shooting Paddle: Continuously shoots bullets from paddle with an interval (SHOOT_PADDLE, default=1sec) between successive bullets. Shows time left in navbar.
+Paddle grows cannons to shoot bullets
+2. Fireball: On collision with brick and ball, bricks explode along with its neighbours (#BONUS)
 
-### Powerups 
-Spawns randomly from broken bricks, Activated on contact with paddle.
-Lasts for 10 secs each
-1. Expand paddle
-2. Shrink Paddle
-3. Ball Multiplier
-4. Fast Ball
-5. Thru-ball
-6. Paddle Grab
+#### Game sounds: 
+Added game sounds for (#BONUS)
+1. Ball collisions
+2. Explosion
+3. Powerup gained
+4. Life lost
+5. Game start
+6. Boss enters
+7. Boss hit
+8. Game Over
+9. Game Win
+10. Shoot bullets
 

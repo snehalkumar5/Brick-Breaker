@@ -76,7 +76,6 @@ class BasicBrick(Brick):
             self.dec_health()
             # self.show_brick(grid,x,y,0)
             if self.health_left() <= 0:
-                self.set_power()
                 self.del_brick(grid)
         return collide
  

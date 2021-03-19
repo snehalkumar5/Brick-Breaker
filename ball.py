@@ -51,9 +51,8 @@ class Ball(Player):
         self.__fire = 0 if self.__fire == 1 else 1
     def get_multiplier(self):
         return self.__multiplier
-    def set_multiplier(self):
-        self.__multiplier = 0 if self.__multiplier == 1 else 1
-        # self.__multiplier = 1
+    def set_multiplier(self,x):
+        self.__multiplier = x
     def get_xvel(self):
         return self.__x_vel
     def get_yvel(self):

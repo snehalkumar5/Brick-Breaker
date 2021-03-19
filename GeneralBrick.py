@@ -1,16 +1,16 @@
 from config import *
 class Brick:
 
-    def __init__(self, x, y,pow):
+    def __init__(self, x, y,power):
         self._x = x
         self._y = y
-        self.__power = pow
+        self.__power = power
     
     def check_power(self):
         return self.__power
 
-    def set_power(self):
-        self.__power  ^= self.__power
+    def set_power(self,x):
+        self.__power = x
 
     def get_coord(self):
         return self._x,self._y
