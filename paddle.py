@@ -62,14 +62,14 @@ class Paddle(Player):
         self.__shoot=0
 
     def set_shooter(self,x):
-        if x == 1:
-            if self.__shoot == 0:
-                self.__shoot = x
-                self.__starttime=time.time()
-            else:
-                return
-        elif self.get_shoot_time()<=0:
-            self.__shoot = x
+        # if x == 1:
+        #     if self.__shoot == 0:
+        #         self.__shoot = x
+        #         self.__starttime=time.time()
+        #     else:
+        #         return
+        # elif self.get_shoot_time()<=0:
+        self.__shoot = x
 
     def get_shoot(self):
         return self.__shoot

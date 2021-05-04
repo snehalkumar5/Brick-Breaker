@@ -1,6 +1,4 @@
 ## BRICK BREAKER
-### DASS ASSIGNMENT - 2
-### Snehal Kumar
 
 ### The game- A version of brick breaker arcade game made using Python3. Player uses paddle to guide the ball and smash the bricks and get the highest score.
 ### How to play

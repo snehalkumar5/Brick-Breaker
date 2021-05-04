@@ -26,6 +26,7 @@ if __name__ == "__main__":
         balls.clear()
         balls=[]
         for i in bricks_arr:
+            i.active=0
             i.del_brick(myboard.grid)
             del i
         bricks_arr.clear()
@@ -39,14 +40,14 @@ if __name__ == "__main__":
             spawn_bricks(5,5,0,level,bricks_arr)
         xx,yy = mypaddle.get_coord()
         x = random.randint(xx+5,xx+mypaddle.get_length()-3)
-        balls.append(Ball(x,yy-2,1))
+        balls.append(Ball(x,yy-1,1))
         balls[0].show(myboard.grid,x,yy-2)
         myboss=0
         if level==3:
             myboss = Boss(xx,1)
             myboss.show(myboard.grid,xx,1,bricks_arr)
             os.system('aplay -q ./sounds/boss_music.wav&')
-            spawn_bricks(5,8,0,level,bricks_arr)
+            spawn_bricks(5,11,0,level,bricks_arr)
         endgame=0
         run=True
         # print('new level',level)
@@ -90,6 +91,8 @@ if __name__ == "__main__":
                     bullets.append(Bullet(a,b-1,0))
                     bullets.append(Bullet(a+lent-1,b-1,0))
                     bullet_time=time.time()
+                    
+
             loseball=[]
             addball=[]
             # Movement of balls
@@ -140,7 +143,7 @@ if __name__ == "__main__":
                 mypaddle.dec_lives()
                 a,b = mypaddle.get_coord()
                 x = random.randint(a+5,a+mypaddle.get_length())
-                addball.append(Ball(x,b-2,1))
+                addball.append(Ball(x,b-1,1))
                 mypaddle.grab_set()
             if addball:
                 add_ball(addball,balls)
@@ -163,7 +166,7 @@ if __name__ == "__main__":
                     step=1
                     todrop=0
                 flag = bricksshow(myboard.grid,bricks_arr,mypaddle,step)
-                step=0
+                step=0  
                 if(len(bricks_arr) == 0 or flag==1 or level>3):
                     clear_screen()
                     print('You Win!'.center(FRAME_WIDTH)) 
@@ -174,6 +177,7 @@ if __name__ == "__main__":
                 myboard.print_board()
                 if flag == -1:
                     mypaddle.set_lives(0)
+            
             if run == False:
                 mypaddle.grab_set()
                 level+=1

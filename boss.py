@@ -65,8 +65,10 @@ class Boss(Player):
     def spawn_protecc(self,grid,brickarray):
         if self.spawned == 1:
             return
-        y=5
+        y=8
         x=5
+        if self.get_health()==2:
+            y=5
         while(True):
             if x>FRAME_WIDTH-10:
                 self.spawned=1

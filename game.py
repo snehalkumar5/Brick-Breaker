@@ -159,13 +159,13 @@ def spawn_bricks(x,y,step,level,bricks_arr):
             # if y%2 == 0:
             #     x = 15
                 # x = 1
-        if y >= 18:
+        if y >= 21:
             return 
         pp=1
         if y == 5:
             mybricks = BasicBrick(x,y,pp)
             # mybricks.show_brick(myboard.grid,x,y,0)
-        elif y == 8:
+        elif y == 11:
             if x < FRAME_WIDTH/8:
                 mybricks = SolidBrick(x,y,pp)
             elif x <FRAME_WIDTH/4:
@@ -187,17 +187,17 @@ def spawn_bricks(x,y,step,level,bricks_arr):
             else: 
                 mybricks = SolidBrick(x,y,pp)
 
-        elif y == 11:
+        elif y == 14:
             mybricks = PrideBrick(x,y,pp)
-        elif y==14:
-            mybricks = PremiumBrick(x,y,pp)
         elif y==17:
+            mybricks = PremiumBrick(x,y,pp)
+        elif y==20:
             mybricks = BasicBrick(x,y,pp)
         if mybricks:
             bricks_arr.append(mybricks)
         next_x = x + 20   
         next_y = y
-        if y==14 or y==17:
+        if y==17 or y==20:
             next_x = x + 10   
 
         spawn_bricks(next_x,next_y,step,level,bricks_arr)
@@ -256,27 +256,27 @@ def dropthabomb(x,y,powerups):
     powerups.append(power)
     
 
-def active_powers(cur_time,paddle,ball,grid,array):
+def active_powers(cur_time,paddle,ball,grid,activearray):
     rem = []
-    for x,i in enumerate(array):
+    for x,i in enumerate(activearray):
         if int(cur_time-i.start_time) > POWERTIME:
             if i.deactivate(paddle,ball,grid) == 1:
-                array.pop(x)    
+                activearray.pop(x)    
                 return
                 # rem.append(i)
     for i in rem:
-        array.remove(i)
+        activearray.remove(i)
 
-def inactive_powers(paddle,ball,grid,array):
+def inactive_powers(paddle,ball,grid,inactivearray):
     rem = []
-    for x,i in enumerate(array):
+    for x,i in enumerate(inactivearray):
         if i.activate(paddle,ball,grid) == 1:
             os.system('aplay -q ./sounds/power_up.wav&')
             activepowers.append(i)
             rem.append(i)
             # inactivepowers.pop(x)
     for i in rem:
-        array.remove(i)
+        inactivearray.remove(i)
 
 def droppings(paddle,grid,ball,powerarray,bullets,boss,bricks):
     rem = []
